@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include<QLoggingCategory>
 
 ///
 /// \brief Main function of this application.
@@ -12,6 +13,7 @@
 ///
 int main(int argc, char *argv[])
 {
+    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg, true);
     // create application
     QApplication app(argc, argv);
     app.setOrganizationName("clemens-sielaff");
