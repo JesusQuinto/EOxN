@@ -51,4 +51,5 @@ void PropertyEditor::showNodes(const QList<zodiac::NodeHandle>& selection)
             m_nodes.insert(node, collapsible);
         }
     }
+
 }

@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QDebug>
 
 #include "collapsible.h"
 #include "nodectrl.h"
@@ -51,6 +52,16 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
         addPlugRow(plug);
     }
     mainLayout->addLayout(m_plugLayout);
+
+    // define the detail button
+    m_detailLayout = new QGridLayout();
+    m_detailLayout->setContentsMargins(0, 8, 0, 0);   // leave space between the plug list and the name
+    m_detailLayout->setColumnStretch(1,1); // so the add-plug button always stays on the far right
+    m_detaillButton = new QPushButton("Detail",this);
+    m_detaillButton->setFlat(true);
+    m_detailLayout->addWidget(m_detaillButton, 0, 2);
+
+    mainLayout->addLayout(m_detailLayout);
 }
 
 void NodeProperties::renameNode()

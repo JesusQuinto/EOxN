@@ -78,6 +78,12 @@ private: // for friend
     ///
     QGridLayout* getPlugLayout() const {return m_plugLayout;}
 
+
+    ///
+    ///     add_documentation
+    ///
+     QGridLayout* getdetailLayout() const {return m_detailLayout;}
+
     ///
     /// \brief Removes a plug from the node and the PlugRow from the editor.
     ///
@@ -120,9 +126,21 @@ private: // members
     QGridLayout* m_plugLayout;
 
     ///
+    ///  add_documentation
+    ///
+    QGridLayout* m_detailLayout;
+
+    ///
     /// \brief Button to add a new Plug to the node.
     ///
     QPushButton* m_addPlugButton;
+
+
+    ///
+    /// \brief Button to detail the node.
+    ///
+    QPushButton * m_detaillButton;
+
 
     ///
     /// \brief All PlugRows contained in this editor.
