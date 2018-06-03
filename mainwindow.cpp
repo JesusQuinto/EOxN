@@ -60,9 +60,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainSplitter->setSizes({100, 900});
 
     // create global actions
-    QAction* newNodeAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Add Node"), this);
+    QAction* newNodeAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Agg Productor"), this);
     newNodeAction->setShortcuts(QKeySequence::New);
-    newNodeAction->setStatusTip(tr("Create a new Node"));
+    newNodeAction->setStatusTip(tr("Crear un nuevo Productor"));
     mainToolBar->addAction(newNodeAction);
     connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
 
@@ -70,8 +70,8 @@ MainWindow::MainWindow(QWidget *parent)
     emptySpacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     mainToolBar->addWidget(emptySpacer);
 
-    QAction* aboutAction = new QAction(QIcon(":/icons/questionmark.svg"), tr("&About"), this);
-    aboutAction->setStatusTip(tr("Show the about box"));
+    QAction* aboutAction = new QAction(QIcon(":/icons/questionmark.svg"), tr("&Acerca"), this);
+    aboutAction->setStatusTip(tr("Mostrar Acerca"));
     mainToolBar->addAction(aboutAction);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(displayAbout()));
 
@@ -100,22 +100,14 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::displayAbout()
 {
     QMessageBox aboutBox;
-    aboutBox.setWindowTitle("About the ZodiacGraph Showcase Application");
+    aboutBox.setWindowTitle("Acerca de EOxN");
     aboutBox.setText(
-        "<h3>About this Application</h3>"
+        "<h3>Acerca de esta aplicacion</h3>"
         "This example demonstrates how to use the <b>ZodiacGraph</b> both as a user and (on the source level) as a "
         "module of your own application."
 
-        "<h3>License</h3>"
-        "<b>ZodiacGraph</b> is developed by <a href=\"http://www.clemens-sielaff.com\" title=\"clemens-sielaff.com\">Clemens Sielaff</a> "
+        "<h3>Licencia</h3>"
         "and released under the terms of the <a href=\"https://opensource.org/licenses/MIT\" title=\"MIT License</a>."
-
-        "<h3>Icons</h3>"
-        "Icons from <a href=\"http://www.flaticon.com\" title=\"Flaticon\">www.flaticon.com</a>, licensed under <a href=\"http://creativecommons.org/licenses/by/3.0/\" title=\"Creative Commons BY 3.0\">CC BY 3.0</a><br>"
-        "&#8594; Arrows, Plus, Minus & Bucket Icons made by <a href=\"http://www.freepik.com\" title=\"Freepik\">Freepik</a><br>"
-        "&#8594; Door Icons made by <a href=\"http://www.icomoon.io\" title=\"Icomoon\">Icomoon</a><br>"
-        "&#8594; Questionmark Icon made by <a href=\"http://www.danielbruce.se\" title=\"Daniel Bruce\">Daniel Bruce</a><br>"
-        "&#8594; Play Icon made by <a href=\"http://yanlu.de\" title=\"Yannick\">Yannick</a>"
          );
     aboutBox.exec();
 }
