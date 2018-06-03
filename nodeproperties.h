@@ -103,6 +103,12 @@ private slots:
     ///
     void createNewPlug();
 
+
+    ///
+    /// \brief Called by pressing the open detail.
+    ///
+    void opendetail();
+
     ///
     /// \brief Creates a new entry in the plug list of this property editor alongside its PlugRow.
     ///
@@ -134,7 +140,6 @@ private: // members
     /// \brief Button to add a new Plug to the node.
     ///
     QPushButton* m_addPlugButton;
-
 
     ///
     /// \brief Button to detail the node.

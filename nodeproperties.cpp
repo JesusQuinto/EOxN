@@ -1,4 +1,6 @@
 #include "nodeproperties.h"
+#include "mainwindow.h"
+#include "detailwindow.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -6,6 +8,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QDialog>
 
 #include "collapsible.h"
 #include "nodectrl.h"
@@ -60,8 +63,16 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
     m_detaillButton = new QPushButton("Detail",this);
     m_detaillButton->setFlat(true);
     m_detailLayout->addWidget(m_detaillButton, 0, 2);
+    connect(m_detaillButton, SIGNAL(pressed()), this, SLOT(opendetail()));
 
     mainLayout->addLayout(m_detailLayout);
+}
+
+void NodeProperties::opendetail()
+{
+    qDebug() <<"test";
+    detailwindow  popup(this);
+    popup.exec();
 }
 
 void NodeProperties::renameNode()
