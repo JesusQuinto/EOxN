@@ -21,7 +21,7 @@ PropertyEditor::PropertyEditor(QWidget *parent)
 
     // ... and the layout of the view widget
     m_layout = new QVBoxLayout(viewWidget);
-    m_layout->setContentsMargins(QMargins(4,0,0,0));
+    m_layout->setContentsMargins(QMargins(4,0,4,0));
     m_layout->addStretch();
 }
 

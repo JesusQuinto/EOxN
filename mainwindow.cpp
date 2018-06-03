@@ -28,7 +28,7 @@ void createZodiacLogo(MainCtrl* mainCtrl);
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setWindowTitle("ZodiacGraph - Showcase Application");
+    setWindowTitle("Red-Productiva");
     setWindowIcon(QIcon(":/icons/zodiac_logo.png"));
 
     // create the main toolbar
