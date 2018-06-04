@@ -3,6 +3,13 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QSplitter>
+#include <QApplication>
+#include <QAction>
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QSettings>
+#include <QStyleFactory>
+#include <QPushButton>
 
 #include "nodectrl.h"
 #include "mainctrl.h"
@@ -40,10 +47,10 @@ detailwindow::detailwindow(QWidget *parent)
     PropertyEditor* propertyEditor = new PropertyEditor(this);
 
     // create the Main Controller
-    MainCtrl *m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor);
+    m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor);
 
     // setup the main splitter
-    QSplitter *m_mainSplitter = new QSplitter(Qt::Horizontal, this);
+    m_mainSplitter = new QSplitter(Qt::Horizontal, this);
     m_mainSplitter->addWidget(propertyEditor);
     m_mainSplitter->addWidget(zodiacView);
     m_mainSplitter->setSizes({100, 900});

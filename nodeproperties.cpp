@@ -70,13 +70,12 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
 
 void NodeProperties::opendetail()
 {
-    detailwindow  popup(this);
-    popup.setMinimumSize(800,500);
-
-    if(popup.exec() == 0)
-         qDebug() <<"descartar";
-    else
-         qDebug() <<"actualizar datos";
+    detailwindow  detail(this);
+    detail.setMinimumSize(800,500);
+    bool save = detail.exec();
+    if (save){
+        qDebug() <<"Guardar Cambios";
+    }
 }
 
 void NodeProperties::renameNode()
