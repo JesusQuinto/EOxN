@@ -46,7 +46,7 @@ public: // methods
     ///
     /// \param [in] parent  Qt parent.
     ///
-    explicit PropertyEditor(QWidget *parent);
+    explicit PropertyEditor(QWidget *parent, bool isRed = false);
 
     ///
     /// \brief Defines a new main controller managing this PropertyEditor.
@@ -66,6 +66,8 @@ public: // methods
     void showNodes(const QList<zodiac::NodeHandle>& selection);
 
 private: // members
+
+    bool isRed;
 
     ///
     /// \brief The main controller managing this PropertyEditor.

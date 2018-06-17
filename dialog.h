@@ -2,9 +2,7 @@
 #define DIALOG_H
 
 #include <QDialog>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
+#include "mainctrl.h"
 
 namespace Ui {
 class Dialog;
@@ -19,12 +17,8 @@ public:
     ~Dialog();
 
 private:
+    MainCtrl* m_mainCtrl;
     Ui::Dialog *ui;
-
-        QGraphicsScene *scene;
-        QGraphicsEllipseItem *ellipse;
-        QGraphicsRectItem *rectangle;
-        QGraphicsTextItem *text;
 };
 
 #endif // DIALOG_H

@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     zodiacView->setScene(zodiacScene);
 
     // create the Property Editor
-    PropertyEditor* propertyEditor = new PropertyEditor(this);
+    PropertyEditor* propertyEditor = new PropertyEditor(this,true);
 
     // create the Main Controller
     m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor);

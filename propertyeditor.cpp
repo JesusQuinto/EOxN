@@ -6,7 +6,7 @@
 #include "nodeproperties.h"
 #include "mainctrl.h"
 
-PropertyEditor::PropertyEditor(QWidget *parent)
+PropertyEditor::PropertyEditor(QWidget *parent, bool isRed)
     : QScrollArea(parent)
     , m_mainCtrl(nullptr)
 {
@@ -23,6 +23,9 @@ PropertyEditor::PropertyEditor(QWidget *parent)
     m_layout = new QVBoxLayout(viewWidget);
     m_layout->setContentsMargins(QMargins(4,0,4,0));
     m_layout->addStretch();
+
+    this->isRed = isRed;
+
 }
 
 void PropertyEditor::showNodes(const QList<zodiac::NodeHandle>& selection)
@@ -46,7 +49,7 @@ void PropertyEditor::showNodes(const QList<zodiac::NodeHandle>& selection)
     for(zodiac::NodeHandle node : selection){
         if(!m_nodes.contains(node)){
             Collapsible* collapsible = new Collapsible(this);
-            collapsible->setWidget(new NodeProperties(m_mainCtrl->getCtrlForHandle(node), collapsible));
+            collapsible->setWidget(new NodeProperties(m_mainCtrl->getCtrlForHandle(node), collapsible,this->isRed ));
             m_layout->insertWidget(0, collapsible); // insert the new Collapsible at the top
             m_nodes.insert(node, collapsible);
         }
