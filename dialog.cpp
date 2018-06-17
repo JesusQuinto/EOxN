@@ -109,18 +109,24 @@ void Dialog::store()
     {
         for(auto plugB: lstPlug)
         {
-            if (plugA == plugB)  break;
-
             edge = zodiacScene->getEdge(plugA,plugB);
-
-            if (edge)  {
-                map.insert(edge,qMakePair(plugA,plugB));
-            }
+            if (edge) map.insert(edge,qMakePair(plugA,plugB));
         }
     }
 
-    foreach (auto item, map) {
-        qDebug() << item;
+    QFile file("/home/jesus/productor.txt");
+    if(!file.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Could not open file";
+        return;
     }
+
+    QDataStream out (&file);
+    out.setVersion(QDataStream::Qt_5_10);
+    out << lstNodes << map;
+
+    file.flush();
+    file.close();
+
     accept();
 }
