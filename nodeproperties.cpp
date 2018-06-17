@@ -33,7 +33,7 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
     QHBoxLayout* nameLayout = new QHBoxLayout();
     m_nameEdit = new QLineEdit(m_node->getName(), this);
     connect(m_nameEdit, SIGNAL(editingFinished()), this, SLOT(renameNode()));
-    nameLayout->addWidget(new QLabel("Name", this));
+    nameLayout->addWidget(new QLabel("Nombre", this));
     nameLayout->addWidget(m_nameEdit);
     nameLayout->setContentsMargins(0, 4, 0, 0);
     mainLayout->addLayout(nameLayout);
@@ -46,7 +46,7 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
     m_addPlugButton->setIconSize(QSize(8, 8));
     m_addPlugButton->setIcon(QIcon(":/icons/plus.svg"));
     m_addPlugButton->setFlat(true);
-    m_plugLayout->addWidget(new QLabel("Plugs", this), 0, 0, 1, 2, Qt::AlignLeft);
+    m_plugLayout->addWidget(new QLabel("Arco", this), 0, 0, 1, 2, Qt::AlignLeft);
     m_plugLayout->addWidget(m_addPlugButton, 0, 2);
     connect(m_addPlugButton, SIGNAL(pressed()), this, SLOT(createNewPlug()));
 
@@ -60,12 +60,21 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
     m_detailLayout = new QGridLayout();
     m_detailLayout->setContentsMargins(0, 8, 0, 0);   // leave space between the plug list and the name
     m_detailLayout->setColumnStretch(1,1); // so the add-plug button always stays on the far right
-    m_detaillButton = new QPushButton("Detail",this);
+    m_detaillButton = new QPushButton("Detalle",this);
     m_detaillButton->setFlat(true);
-    m_detailLayout->addWidget(m_detaillButton, 0, 2);
+    m_detailLayout->addWidget(m_detaillButton, 0, 0);
     connect(m_detaillButton, SIGNAL(pressed()), this, SLOT(opendetail()));
 
+    QPushButton * m_removeButton = new QPushButton("Eliminar",this);
+    m_removeButton->setFlat(true);
+    m_detailLayout->addWidget(m_removeButton, 0, 2);
+    connect(m_removeButton, SIGNAL(pressed()), this, SLOT(removeNode()));
+
     mainLayout->addLayout(m_detailLayout);
+}
+
+void NodeProperties::removeNode(){
+   m_node->remove();
 }
 
 void NodeProperties::opendetail()

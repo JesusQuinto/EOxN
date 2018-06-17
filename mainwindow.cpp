@@ -8,6 +8,7 @@
 #include <QSplitter>
 #include <QStyleFactory>
 #include <QToolBar>
+#include <QPushButton>
 
 #include "nodectrl.h"
 #include "mainctrl.h"
@@ -74,6 +75,10 @@ MainWindow::MainWindow(QWidget *parent)
     aboutAction->setStatusTip(tr("Mostrar Acerca"));
     mainToolBar->addAction(aboutAction);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(displayAbout()));
+
+    QPushButton *savebutton = new QPushButton(this);
+    savebutton->setText("Optimizar");
+    savebutton->move(100, 400);
 
     // initialize the GUI
     setCentralWidget(m_mainSplitter);

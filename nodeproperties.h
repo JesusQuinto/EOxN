@@ -99,6 +99,11 @@ private slots:
     void renameNode();
 
     ///
+    /// \brief add_documentation
+    ///
+    void removeNode();
+
+    ///
     /// \brief Called by pressing the add-plug button.
     ///
     void createNewPlug();

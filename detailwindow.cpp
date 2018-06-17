@@ -66,6 +66,10 @@ detailwindow::detailwindow(QWidget *parent)
     emptySpacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     mainToolBar->addWidget(emptySpacer);
 
+    QPushButton *savebutton = new QPushButton(this);
+    savebutton->setText("Guardar");
+    savebutton->move(100, 500);
+
     // initialize the GUI
     zodiacScene->updateStyle();
     zodiacView->updateStyle();
