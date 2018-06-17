@@ -19,6 +19,10 @@
 #include <QHBoxLayout>
 #include <QTextEdit>
 #include <QToolBar>
+#include <QString>
+#include <QMap>
+#include <QFile>
+#include <QDebug>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -28,13 +32,14 @@ Dialog::Dialog(QWidget *parent) :
      setWindowTitle("Productor");
     setWindowIcon(QIcon(":/icons/zodiac_logo.png"));
 
+     this->setGeometry(0,0,800,500);
 
     QGridLayout* mainGrid = new QGridLayout;
     QVBoxLayout* topLayout = new QVBoxLayout;
     QVBoxLayout* MedLayout = new QVBoxLayout;
 
     // create the Zodiac graph
-        zodiac::Scene* zodiacScene = new zodiac::Scene(this);
+        zodiacScene = new zodiac::Scene(this);
         zodiac::View* zodiacView = new zodiac::View(this);
         zodiacView->setScene(zodiacScene);
 
@@ -48,7 +53,7 @@ Dialog::Dialog(QWidget *parent) :
        QSplitter* m_mainSplitter = new QSplitter(Qt::Horizontal, this);
         m_mainSplitter->addWidget(propertyEditor);
         m_mainSplitter->addWidget(zodiacView);
-        m_mainSplitter->setSizes({100, 900});
+        m_mainSplitter->setSizes({200, 800});
 
         // create the main toolbar
         QToolBar* mainToolBar = new QToolBar(this);
@@ -64,11 +69,11 @@ Dialog::Dialog(QWidget *parent) :
         mainToolBar->addAction(newNodeAction);
         connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
 
-        QAction* saveAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Guardar"), this);
+         QAction* saveAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Guardar"), this);
         saveAction->setShortcuts(QKeySequence::New);
         saveAction->setStatusTip(tr("Guardar Cambios"));
         mainToolBar->addAction(saveAction);
-        connect(saveAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
+        connect(saveAction, SIGNAL(triggered()), this, SLOT(store()));
 
         topLayout->addWidget(mainToolBar);
         MedLayout->addWidget(m_mainSplitter);
@@ -83,4 +88,39 @@ Dialog::Dialog(QWidget *parent) :
 Dialog::~Dialog()
 {
     delete ui;
+}
+
+void Dialog::store()
+{
+    QList<zodiac::Node *> lstNodes;
+    zodiac::PlugEdge* edge;
+    QList<zodiac::Plug*> lstPlug;
+    QMap<zodiac::PlugEdge*,QPair<zodiac::Plug*,zodiac::Plug*>> map;
+
+    lstNodes = zodiacScene->getNodes();
+
+    for (auto node: lstNodes)
+    {
+        lstPlug << node->getPlugs();
+       // qDebug() <<"Node"<<node;
+       // qDebug() <<"Plugs:"<< lstPlug;
+    }
+    for(auto plugA:lstPlug)
+    {
+        for(auto plugB: lstPlug)
+        {
+            if (plugA == plugB)  break;
+
+            edge = zodiacScene->getEdge(plugA,plugB);
+
+            if (edge)  {
+                map.insert(edge,qMakePair(plugA,plugB));
+            }
+        }
+    }
+
+    foreach (auto item, map) {
+        qDebug() << item;
+    }
+    accept();
 }

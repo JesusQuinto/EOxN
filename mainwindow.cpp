@@ -67,6 +67,12 @@ MainWindow::MainWindow(QWidget *parent)
     mainToolBar->addAction(newNodeAction);
     connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
 
+    QAction* optimizationAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Optimizar"), this);
+    optimizationAction->setShortcuts(QKeySequence::New);
+    optimizationAction->setStatusTip(tr("Correr Proceso de Optimizacion"));
+    mainToolBar->addAction(optimizationAction);
+    //connect(saveAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
+
     QWidget* emptySpacer = new QWidget();
     emptySpacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     mainToolBar->addWidget(emptySpacer);
@@ -75,10 +81,6 @@ MainWindow::MainWindow(QWidget *parent)
     aboutAction->setStatusTip(tr("Mostrar Acerca"));
     mainToolBar->addAction(aboutAction);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(displayAbout()));
-
-    QPushButton *savebutton = new QPushButton(this);
-    savebutton->setText("Optimizar");
-    savebutton->move(100, 400);
 
     // initialize the GUI
     setCentralWidget(m_mainSplitter);

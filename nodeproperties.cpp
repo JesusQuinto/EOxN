@@ -83,13 +83,11 @@ void NodeProperties::removeNode(){
 void NodeProperties::opendetail()
 {
     Dialog  detail(this);
-    bool save = detail.exec();
 
-    /*  cierra solo
-    if (save){
-        qDebug() <<"Guardar Cambios";
+    if(bool value = detail.exec())
+    {
+        qDebug() << value;
     }
-    */
 }
 
 void NodeProperties::renameNode()

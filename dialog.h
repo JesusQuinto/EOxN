@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "mainctrl.h"
+#include "zodiacgraph/scene.h"
 
 namespace Ui {
 class Dialog;
@@ -14,10 +15,15 @@ class Dialog : public QDialog
 
 public:
     explicit Dialog(QWidget *parent = 0);
+    void read();
     ~Dialog();
+
+public slots:
+    void store();
 
 private:
     MainCtrl* m_mainCtrl;
+    zodiac::Scene* zodiacScene;
     Ui::Dialog *ui;
 };
 
