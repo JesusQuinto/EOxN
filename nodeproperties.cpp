@@ -1,6 +1,6 @@
 #include "nodeproperties.h"
 #include "mainwindow.h"
-#include "detailwindow.h"
+#include "dialog.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -79,12 +79,14 @@ void NodeProperties::removeNode(){
 
 void NodeProperties::opendetail()
 {
-    detailwindow  detail(this);
-    detail.setMinimumSize(800,500);
+    Dialog  detail(this);
     bool save = detail.exec();
+
+    /*  cierra solo
     if (save){
         qDebug() <<"Guardar Cambios";
     }
+    */
 }
 
 void NodeProperties::renameNode()
