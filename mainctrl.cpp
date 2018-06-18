@@ -7,7 +7,7 @@
 #include "propertyeditor.h"
 #include "zodiacgraph/nodehandle.h"
 
-QString MainCtrl::s_defaultName = "Node ";
+QString MainCtrl::s_defaultName = "Bien ";
 
 MainCtrl::MainCtrl(QObject *parent, zodiac::Scene* scene, PropertyEditor* propertyEditor)
     : QObject(parent)
@@ -112,17 +112,19 @@ bool MainCtrl::shutdown()
 void MainCtrl::createDefaultNode()
 {
     NodeCtrl* newNode = createNode();
-
-//    int plugCount = (qreal(qrand())/qreal(RAND_MAX))*12;
-//    for(int i = 0; i < plugCount + 4; ++i){
-//        if((qreal(qrand())/qreal(RAND_MAX))<0.5){
-//            newNode->addIncomingPlug("plug");
-//        } else {
-//            newNode->addOutgoingPlug("plug");
-//        }
-//    }
-
     newNode->setSelected(true);
+}
+
+void MainCtrl::createProductorNode()
+{
+        NodeCtrl* newNode = createNode("Productor"+ QString::number(m_nodeIndex++));
+        newNode->setSelected(true);
+}
+
+void MainCtrl::createProcessNode()
+{
+        NodeCtrl* newNode = createNode("Proceso"+ QString::number(m_nodeIndex++));
+        newNode->setSelected(true);
 }
 
 void MainCtrl::selectionChanged(QList<zodiac::NodeHandle> selection)

@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     newNodeAction->setShortcuts(QKeySequence::New);
     newNodeAction->setStatusTip(tr("Crear un nuevo Productor"));
     mainToolBar->addAction(newNodeAction);
-    connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
+    connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createProductorNode()));
 
     QAction* optimizationAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Optimizar"), this);
     optimizationAction->setShortcuts(QKeySequence::New);
@@ -113,8 +113,6 @@ void MainWindow::displayAbout()
         "This example demonstrates how to use the <b>ZodiacGraph</b> both as a user and (on the source level) as a "
         "module of your own application."
 
-        "<h3>Licencia</h3>"
-        "and released under the terms of the <a href=\"https://opensource.org/licenses/MIT\" title=\"MIT License</a>."
          );
     aboutBox.exec();
 }

@@ -108,6 +108,8 @@ public slots:
     /// \brief Creates a new node in the graph selects and activates it.
     ///
     void createDefaultNode();
+    void createProcessNode();
+    void createProductorNode();
 
 private slots:
 

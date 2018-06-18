@@ -70,9 +70,15 @@ Dialog::Dialog(QWidget *parent, QString name) :
         newNodeAction->setShortcuts(QKeySequence::New);
         newNodeAction->setStatusTip(tr("Crear un nuevo Proceso"));
         mainToolBar->addAction(newNodeAction);
-        connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
+        connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createProcessNode()));
 
-         QAction* saveAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Guardar"), this);
+        QAction* newBienAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Agg bien"), this);
+        newBienAction->setShortcuts(QKeySequence::New);
+        newBienAction->setStatusTip(tr("Crear un nuevo bien"));
+        mainToolBar->addAction(newBienAction);
+        connect(newBienAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
+
+        QAction* saveAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Guardar"), this);
         saveAction->setShortcuts(QKeySequence::New);
         saveAction->setStatusTip(tr("Guardar Cambios"));
         mainToolBar->addAction(saveAction);
@@ -106,7 +112,6 @@ void Dialog::save()
     for (auto node: lstNodes)
     {
         nodeHandle = new zodiac::NodeHandle(node);
-
         HList_this = nodeHandle->getPlugs();
 
         for(auto item: HList_this)
