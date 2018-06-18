@@ -52,7 +52,7 @@ class NodeProperties : public QWidget
     ///
     friend class PlugRow;
 
-public: // methods
+public:
 
     ///
     /// \brief Constructor.
@@ -61,6 +61,8 @@ public: // methods
     /// \param [in] parent  Collapsible parent object.
     ///
     explicit NodeProperties(NodeCtrl* node, Collapsible *parent, bool isRed);
+
+    QString name;
 
 private: // for friend
 

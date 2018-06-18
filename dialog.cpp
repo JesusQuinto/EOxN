@@ -24,12 +24,15 @@
 #include <QFile>
 #include <QDebug>
 
-Dialog::Dialog(QWidget *parent) :
+Dialog::Dialog(QWidget *parent, QString name) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
 
-     setWindowTitle("Productor");
+
+     this->name = name;
+
+     setWindowTitle("Productor: "+ this->name);
     setWindowIcon(QIcon(":/icons/zodiac_logo.png"));
 
      this->setGeometry(0,0,800,500);
@@ -136,7 +139,7 @@ void Dialog::save()
                     );
     }
 
-    QFile file("./productor.txt");
+    QFile file("./productor_"+this->name+".txt");
     if(!file.open(QIODevice::WriteOnly))
     {
         qDebug() << "Could not open file";
@@ -162,7 +165,7 @@ void Dialog::read(MainCtrl *mainCtrl)
     QList<QPair<QString,QPair<QPoint,QList<QPair<QString,bool> >>>> nodeList;
    QList<QPair<QPair<QString,QString>,QPair<QString,QString>>> edgeList;
 
-    QFile file("./productor.txt");
+    QFile file("./productor_"+ this->name+".txt");
     if(!file.open(QIODevice::ReadOnly))
     {
         qDebug() << "Could not open file";

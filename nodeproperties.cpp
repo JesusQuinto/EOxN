@@ -29,6 +29,8 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent, bool isRed =
     // update the title of the collapsible container
     parent->updateTitle(m_node->getName());
 
+    this->name = m_node->getName();
+
     // define the name edit
     QHBoxLayout* nameLayout = new QHBoxLayout();
     m_nameEdit = new QLineEdit(m_node->getName(), this);
@@ -82,7 +84,7 @@ void NodeProperties::removeNode(){
 
 void NodeProperties::opendetail()
 {
-    Dialog  detail(this);
+    Dialog  detail(this,this->name);
 
     if(bool value = detail.exec())
     {
