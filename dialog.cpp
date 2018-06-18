@@ -73,7 +73,7 @@ Dialog::Dialog(QWidget *parent) :
         saveAction->setShortcuts(QKeySequence::New);
         saveAction->setStatusTip(tr("Guardar Cambios"));
         mainToolBar->addAction(saveAction);
-        connect(saveAction, SIGNAL(triggered()), this, SLOT(store()));
+        connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
         topLayout->addWidget(mainToolBar);
         MedLayout->addWidget(m_mainSplitter);
@@ -83,6 +83,7 @@ Dialog::Dialog(QWidget *parent) :
 
          zodiacScene->updateStyle();
          zodiacView->updateStyle();
+         read(m_mainCtrl);
 }
 
 Dialog::~Dialog()
@@ -90,43 +91,124 @@ Dialog::~Dialog()
     delete ui;
 }
 
-void Dialog::store()
+void Dialog::save()
 {
-    QList<zodiac::Node *> lstNodes;
-    zodiac::PlugEdge* edge;
-    QList<zodiac::Plug*> lstPlug;
-    QMap<zodiac::PlugEdge*,QPair<zodiac::Plug*,zodiac::Plug*>> map;
-
-    lstNodes = zodiacScene->getNodes();
+    QList<QPair<QString,QPair<QPoint,QList<QPair<QString,bool> >>>> nodeList;
+    QList<QPair<QPair<QString,QString>,QPair<QString,QString>>> edgeList;
+    QList<zodiac::PlugHandle> HList_this, HList_other;
+    QList<QPair<QString,bool> > plugList;
+    QList<zodiac::Node*>lstNodes = zodiacScene->getNodes();
+     zodiac::NodeHandle* nodeHandle;
 
     for (auto node: lstNodes)
     {
-        lstPlug << node->getPlugs();
-       // qDebug() <<"Node"<<node;
-       // qDebug() <<"Plugs:"<< lstPlug;
-    }
-    for(auto plugA:lstPlug)
-    {
-        for(auto plugB: lstPlug)
+        nodeHandle = new zodiac::NodeHandle(node);
+
+        HList_this = nodeHandle->getPlugs();
+
+        for(auto item: HList_this)
         {
-            edge = zodiacScene->getEdge(plugA,plugB);
-            if (edge) map.insert(edge,qMakePair(plugA,plugB));
+                plugList.append(qMakePair(item.getName(),item.isOutgoing()));
+                HList_other =  item.getConnectedPlugs();
+
+                for(auto item2: HList_other)
+                {
+                    if(item.isOutgoing())
+                    {
+                        edgeList.append(
+                                    qMakePair(
+                                        qMakePair(nodeHandle->getName(),item.getName()),
+                                        qMakePair(item2.getNode().getName(),item2.getName())
+                                        )
+                                    );
+                    }
+
+                 }
         }
+
+        nodeList.append(
+                    qMakePair(
+                        nodeHandle->getName(),
+                        qMakePair(
+                               nodeHandle->getPos().toPoint(),
+                                plugList)
+                        )
+                    );
     }
 
-    QFile file("/home/jesus/productor.txt");
+    QFile file("./productor.txt");
     if(!file.open(QIODevice::WriteOnly))
     {
         qDebug() << "Could not open file";
         return;
     }
 
+    qDebug() <<" nodeList" << nodeList;
+    qDebug() <<" edgeList" << edgeList;
+
     QDataStream out (&file);
     out.setVersion(QDataStream::Qt_5_10);
-    out << lstNodes << map;
+    out <<  nodeList << edgeList;
 
     file.flush();
     file.close();
 
     accept();
 }
+
+
+void Dialog::read(MainCtrl *mainCtrl)
+{
+    QList<QPair<QString,QPair<QPoint,QList<QPair<QString,bool> >>>> nodeList;
+   QList<QPair<QPair<QString,QString>,QPair<QString,QString>>> edgeList;
+
+    QFile file("./productor.txt");
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Could not open file";
+        return;
+    }
+
+    QDataStream in (&file);
+
+    in.setVersion(QDataStream::Qt_5_10);
+
+    in  >> nodeList >> edgeList;
+
+    file.close();
+
+
+    qDebug() <<" nodeList" << nodeList;
+    qDebug() <<" edgeList" << edgeList;
+
+    QMap<QString, NodeCtrl*> mapNodes;
+
+
+    for(auto node: nodeList)
+    {
+         mapNodes[node.first] = mainCtrl->createNode(node.first);
+         mapNodes[node.first]
+                 ->getNodeHandle()
+                 .setPos(
+                     node.second.first.rx(),
+                     node.second.first.ry()
+                     );
+
+         for(auto plug:node.second.second)
+         {
+             if(plug.second) mapNodes[node.first]->addOutgoingPlug(plug.first);
+             else mapNodes[node.first]->addIncomingPlug(plug.first);
+         }
+
+    }
+
+    for(auto edge: edgeList)
+    {
+        mapNodes[edge.first.first]
+                ->getNodeHandle().getPlug(edge.first.second)
+                .connectPlug(mapNodes[edge.second.first]
+                ->getNodeHandle().getPlug(edge.second.second));
+    }
+
+}
+

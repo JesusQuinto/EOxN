@@ -15,11 +15,11 @@ class Dialog : public QDialog
 
 public:
     explicit Dialog(QWidget *parent = 0);
-    void read();
+    void read(MainCtrl *);
     ~Dialog();
 
 public slots:
-    void store();
+    void save();
 
 private:
     MainCtrl* m_mainCtrl;
