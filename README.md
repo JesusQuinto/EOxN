@@ -1,4 +1,4 @@
-#EOxN
+# EOxN
 Optimizacion de procesos mediante simplex, bajo relaciones entre bienes, procesos y productores.
 
 ## Contribution
