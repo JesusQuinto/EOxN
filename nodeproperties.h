@@ -60,7 +60,7 @@ public:
     /// \param [in] node    Node whose properties to display.
     /// \param [in] parent  Collapsible parent object.
     ///
-    explicit NodeProperties(NodeCtrl* node, Collapsible *parent, bool isRed);
+    explicit NodeProperties(NodeCtrl* node, Collapsible *parent, bool isRed );
 
 private: // for friend
 

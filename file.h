@@ -20,6 +20,7 @@ public:
 
 private:
     MainCtrl* m_mainCtrl;
+    QString pName;
 
 signals:
 

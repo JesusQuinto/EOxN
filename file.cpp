@@ -20,7 +20,7 @@ File::File(QObject *parent, MainCtrl *mainCtr)
 void File::saveAs(QString fileName)
 {
     if(fileName.isNull())
-        fileName = "newGraph.exn";
+        fileName = pName;
 
     QString name = QFileDialog::getSaveFileName(nullptr,
            tr("Guardar Grafo"), fileName,
@@ -35,7 +35,7 @@ void File::saveAs(QString fileName)
 void File::open(QString fileName)
 {
     if (fileName.isNull())
-        fileName = "./";
+        fileName = pName;
 
     QString name = QFileDialog::getOpenFileName(nullptr,
           tr("Abrir Grafo"), fileName,
@@ -111,6 +111,7 @@ void File::save(QString fileName)
                     //nodeDataMap[node.getId().toString()]
                 }
 
+                pName = fileName;
     }
 
     QFile file(fileName);
@@ -165,7 +166,10 @@ void File::load(QString fileName)
 
     file.close();
 
+    m_mainCtrl->cleanScene();
+
     QMap<QString, NodeCtrl*> mapNodes;
+    QString newId;
 
     QMap<QString,QPair<QString,QPoint>>::iterator i;
     for (i = nodeMap.begin();  i  !=  nodeMap.end(); ++i)

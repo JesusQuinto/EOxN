@@ -81,6 +81,7 @@ public: // methods
     ///
     bool deleteNode(NodeCtrl* node);
 
+    bool cleanScene();
     ///
     /// \brief Returns the NodeCtrl that manages a given NodeHandle.
     ///
@@ -110,6 +111,7 @@ public: // methods
    zodiac::SceneHandle* getSocialScene();
    void setIsProducer(bool);
    bool getIsProducer();
+
 
 public slots:
 

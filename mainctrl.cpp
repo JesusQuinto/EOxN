@@ -7,7 +7,7 @@
 #include "propertyeditor.h"
 #include "zodiacgraph/nodehandle.h"
 
-QString MainCtrl::s_defaultName = "Productor ";
+QString MainCtrl::s_defaultName = "bien ";
 
 MainCtrl::MainCtrl(
         QObject *parent,
@@ -45,6 +45,17 @@ NodeCtrl* MainCtrl::createNode(const QString& name)
     return nodeCtrl;
 }
 
+bool MainCtrl::cleanScene()
+{
+    for(auto node: m_nodes.values())
+    {
+        deleteNode(node);
+    }
+    m_nodes.clear();
+
+    return true;
+}
+
 bool MainCtrl::deleteNode(NodeCtrl* node)
 {
 #ifdef QT_DEBUG
@@ -55,10 +66,13 @@ bool MainCtrl::deleteNode(NodeCtrl* node)
     }
 #endif
 
-    if(!node->isRemovable()){
-        // nodes with connections cannot be deleted
-        return false;
+    if(!node->isRemovable())
+    {
+        auto plugHandleLst =  node->getPlugHandles();
+        for(auto plug: plugHandleLst)
+            plug.disconnectAll();
     }
+
 
     // disconnect and delete the node
     node->disconnect();
