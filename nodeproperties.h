@@ -62,8 +62,6 @@ public:
     ///
     explicit NodeProperties(NodeCtrl* node, Collapsible *parent, bool isRed);
 
-    QString name;
-
 private: // for friend
 
     ///

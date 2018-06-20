@@ -84,7 +84,6 @@ RESOURCES += \
     res/icons.qrc
 
 FORMS += \
-    dialog.ui \
-    savedialog.ui
+    dialog.ui
 
 

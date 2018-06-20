@@ -3,6 +3,7 @@
 
 #include "nodectrl.h"
 #include "mainctrl.h"
+#include "file.h"
 #include "propertyeditor.h"
 #include "zodiacgraph/baseedge.h"
 #include "zodiacgraph/edgearrow.h"
@@ -16,23 +17,20 @@
 #include "zodiacgraph/view.h"
 
 #include <QSplitter>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QTextEdit>
 #include <QToolBar>
 #include <QString>
-#include <QMap>
-#include <QFile>
 #include <QDebug>
 
-Dialog::Dialog(QWidget *parent, QString name) :
+Dialog::Dialog(QWidget *parent, QString _pName, QString _pId) :
     QDialog(parent),
-    ui(new Ui::Dialog)
+    ui(new Ui::Dialog),
+    pName(_pName),
+    pId(_pId)
 {
 
-
-     this->name = name;
-
-     setWindowTitle("Productor: "+ this->name);
+    setWindowTitle("Productor: "+ _pName);
     setWindowIcon(QIcon(":/icons/zodiac_logo.png"));
 
      this->setGeometry(0,0,800,500);
@@ -40,6 +38,7 @@ Dialog::Dialog(QWidget *parent, QString name) :
     QGridLayout* mainGrid = new QGridLayout;
     QVBoxLayout* topLayout = new QVBoxLayout;
     QVBoxLayout* MedLayout = new QVBoxLayout;
+
 
     // create the Zodiac graph
         zodiacScene = new zodiac::Scene(this);
@@ -51,6 +50,9 @@ Dialog::Dialog(QWidget *parent, QString name) :
 
         // create the Main Controller
         m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor,true);
+
+        //create the File Manager
+        file = new File(this,m_mainCtrl);
 
         // setup the main splitter
        QSplitter* m_mainSplitter = new QSplitter(Qt::Horizontal, this);
@@ -92,7 +94,7 @@ Dialog::Dialog(QWidget *parent, QString name) :
 
          zodiacScene->updateStyle();
          zodiacView->updateStyle();
-         read(m_mainCtrl);
+         read();
 }
 
 Dialog::~Dialog()
@@ -102,121 +104,13 @@ Dialog::~Dialog()
 
 void Dialog::save()
 {
-    QList<QPair<QString,QPair<QPoint,QList<QPair<QString,bool> >>>> nodeList;
-    QList<QPair<QPair<QString,QString>,QPair<QString,QString>>> edgeList;
-    QList<zodiac::PlugHandle> HList_this, HList_other;
-    QList<QPair<QString,bool> > plugList;
-    QList<zodiac::Node*>lstNodes = zodiacScene->getNodes();
-     zodiac::NodeHandle* nodeHandle;
-
-    for (auto node: lstNodes)
-    {
-        nodeHandle = new zodiac::NodeHandle(node);
-        HList_this = nodeHandle->getPlugs();
-
-        for(auto item: HList_this)
-        {
-                plugList.append(qMakePair(item.getName(),item.isOutgoing()));
-                HList_other =  item.getConnectedPlugs();
-
-                for(auto item2: HList_other)
-                {
-                    if(item.isOutgoing())
-                    {
-                        edgeList.append(
-                                    qMakePair(
-                                        qMakePair(nodeHandle->getName(),item.getName()),
-                                        qMakePair(item2.getNode().getName(),item2.getName())
-                                        )
-                                    );
-                    }
-
-                 }
-        }
-
-        nodeList.append(
-                    qMakePair(
-                        nodeHandle->getName(),
-                        qMakePair(
-                               nodeHandle->getPos().toPoint(),
-                                plugList)
-                        )
-                    );
-    }
-
-    QFile file("./productor_"+this->name+".txt");
-    if(!file.open(QIODevice::WriteOnly))
-    {
-        qDebug() << "Could not open file";
-        return;
-    }
-
-    qDebug() <<" nodeList" << nodeList;
-    qDebug() <<" edgeList" << edgeList;
-
-    QDataStream out (&file);
-    out.setVersion(QDataStream::Qt_5_10);
-    out <<  nodeList << edgeList;
-
-    file.flush();
-    file.close();
-
+    file->save(pName+"_pro_"+pId+".exn");
     accept();
 }
 
 
-void Dialog::read(MainCtrl *mainCtrl)
+void Dialog::read()
 {
-    QList<QPair<QString,QPair<QPoint,QList<QPair<QString,bool> >>>> nodeList;
-   QList<QPair<QPair<QString,QString>,QPair<QString,QString>>> edgeList;
-
-    QFile file("./productor_"+ this->name+".txt");
-    if(!file.open(QIODevice::ReadOnly))
-    {
-        qDebug() << "Could not open file";
-        return;
-    }
-
-    QDataStream in (&file);
-
-    in.setVersion(QDataStream::Qt_5_10);
-
-    in  >> nodeList >> edgeList;
-
-    file.close();
-
-
-    qDebug() <<" nodeList" << nodeList;
-    qDebug() <<" edgeList" << edgeList;
-
-    QMap<QString, NodeCtrl*> mapNodes;
-
-
-    for(auto node: nodeList)
-    {
-         mapNodes[node.first] = mainCtrl->createNode(node.first);
-         mapNodes[node.first]
-                 ->getNodeHandle()
-                 .setPos(
-                     node.second.first.rx(),
-                     node.second.first.ry()
-                     );
-
-         for(auto plug:node.second.second)
-         {
-             if(plug.second) mapNodes[node.first]->addOutgoingPlug(plug.first);
-             else mapNodes[node.first]->addIncomingPlug(plug.first);
-         }
-
-    }
-
-    for(auto edge: edgeList)
-    {
-        mapNodes[edge.first.first]
-                ->getNodeHandle().getPlug(edge.first.second)
-                .connectPlug(mapNodes[edge.second.first]
-                ->getNodeHandle().getPlug(edge.second.second));
-    }
-
+     file->load(pName+"_pro_"+pId+".exn");
 }
 
