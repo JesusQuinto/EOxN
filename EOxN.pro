@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     zodiacgraph/straightdoubleedge.cpp \
     zodiacgraph/straightedge.cpp \
     zodiacgraph/view.cpp \
-    dialog.cpp
+    dialog.cpp \
+    file.cpp
 
 HEADERS  += mainwindow.h \
     collapsible.h \
@@ -76,12 +77,14 @@ HEADERS  += mainwindow.h \
     zodiacgraph/straightedge.h \
     zodiacgraph/utils.h \
     zodiacgraph/view.h \
-    dialog.h
+    dialog.h \
+    file.h
 
 RESOURCES += \
     res/icons.qrc
 
 FORMS += \
-    dialog.ui
+    dialog.ui \
+    savedialog.ui
 
 

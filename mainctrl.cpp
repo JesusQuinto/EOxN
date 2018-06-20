@@ -7,14 +7,19 @@
 #include "propertyeditor.h"
 #include "zodiacgraph/nodehandle.h"
 
-QString MainCtrl::s_defaultName = "Bien ";
+QString MainCtrl::s_defaultName = "Productor ";
 
-MainCtrl::MainCtrl(QObject *parent, zodiac::Scene* scene, PropertyEditor* propertyEditor)
+MainCtrl::MainCtrl(
+        QObject *parent,
+        zodiac::Scene* scene,
+        PropertyEditor* propertyEditor,
+        bool IsProducer)
     : QObject(parent)
     , m_scene(zodiac::SceneHandle(scene))
     , m_propertyEditor(propertyEditor)
     , m_nodes(QHash<zodiac::NodeHandle, NodeCtrl*>())
     , m_nodeIndex(1)            // name suffixes start at 1
+    ,m_isProducer(IsProducer)
 {
     m_propertyEditor->setMainCtrl(this);
 
@@ -130,4 +135,16 @@ void MainCtrl::createProcessNode()
 void MainCtrl::selectionChanged(QList<zodiac::NodeHandle> selection)
 {
     m_propertyEditor->showNodes(selection);
+}
+
+zodiac::SceneHandle* MainCtrl::getSocialScene(){
+    return &m_scene;
+}
+
+bool MainCtrl::getIsProducer(){
+    return m_isProducer;
+}
+
+void MainCtrl::setIsProducer(bool isProducer){
+    m_isProducer = isProducer;
 }

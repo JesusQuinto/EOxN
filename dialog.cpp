@@ -50,7 +50,7 @@ Dialog::Dialog(QWidget *parent, QString name) :
         PropertyEditor* propertyEditor = new PropertyEditor(this,false);
 
         // create the Main Controller
-        m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor);
+        m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor,true);
 
         // setup the main splitter
        QSplitter* m_mainSplitter = new QSplitter(Qt::Horizontal, this);

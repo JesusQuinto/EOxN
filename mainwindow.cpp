@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "file.h"
 
 #include <QApplication>
 #include <QAction>
@@ -52,7 +53,10 @@ MainWindow::MainWindow(QWidget *parent)
     PropertyEditor* propertyEditor = new PropertyEditor(this,true);
 
     // create the Main Controller
-    m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor);
+    m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor,false);
+
+    //create the File Manager
+    File* file = new File(this,m_mainCtrl);
 
     // setup the main splitter
     m_mainSplitter = new QSplitter(Qt::Horizontal, this);
@@ -61,7 +65,19 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainSplitter->setSizes({100, 900});
 
     // create global actions
-    QAction* newNodeAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Agg Productor"), this);
+    QAction* openAction = new QAction( tr("&Abrir"), this);
+    openAction->setShortcuts(QKeySequence::New);
+    openAction->setStatusTip(tr("Abrir Proyecto"));
+    mainToolBar->addAction(openAction);
+    connect(openAction, SIGNAL(triggered()), file, SLOT(open()));
+
+    QAction* saveAction = new QAction( tr("&Guardar"), this);
+    saveAction->setShortcuts(QKeySequence::New);
+    saveAction->setStatusTip(tr("Guardar Proyecto"));
+    mainToolBar->addAction(saveAction);
+    connect(saveAction, SIGNAL(triggered()), file, SLOT(saveAs()));
+
+    QAction* newNodeAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Add Productor"), this);
     newNodeAction->setShortcuts(QKeySequence::New);
     newNodeAction->setStatusTip(tr("Crear un nuevo Productor"));
     mainToolBar->addAction(newNodeAction);

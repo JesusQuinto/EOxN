@@ -56,7 +56,12 @@ public: // methods
     /// \param [in] scene           Handle of a zodiac::Scene.
     /// \param [in] propertyEditor  Property editor.
     ///
-    explicit MainCtrl(QObject *parent, zodiac::Scene* scene, PropertyEditor* propertyEditor);
+    explicit MainCtrl(
+            QObject *parent,
+            zodiac::Scene* scene,
+            PropertyEditor* propertyEditor,
+            bool isProducer
+            );
 
     ///
     /// \brief Creates a new node in the graph.
@@ -101,6 +106,10 @@ public: // methods
     /// \return             <i>true</i> if the manager was shut down successfully -- <i>false</i> if the user objected.
     ///
     bool shutdown();
+
+   zodiac::SceneHandle* getSocialScene();
+   void setIsProducer(bool);
+   bool getIsProducer();
 
 public slots:
 
@@ -148,6 +157,8 @@ private: // static members
     /// \brief Default node name. "Node_" will result in a default name of "Node_12" for example.
     ///
     static QString s_defaultName;
+
+    bool m_isProducer;
 
 };
 
