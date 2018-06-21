@@ -49,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent)
     zodiac::View* zodiacView = new zodiac::View(this);
     zodiacView->setScene(zodiacScene);
 
+
+
+
     // create the Property Editor
     PropertyEditor* propertyEditor = new PropertyEditor(this,true);
 

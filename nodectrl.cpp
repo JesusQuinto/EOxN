@@ -1,6 +1,8 @@
 #include "nodectrl.h"
-
+#include "validator.h"
 #include "mainctrl.h"
+
+#include <QDebug>
 
 typedef zodiac::PlugHandle PlugHandle;
 
@@ -10,6 +12,8 @@ NodeCtrl::NodeCtrl(MainCtrl* manager,  zodiac::NodeHandle node)
     , m_node(node)
     , m_plugs(QHash<PlugHandle, QList<PlugHandle>>())
 {
+    validator = new Validator(this,m_manager);
+
     // connect node signals
     connect(&m_node, SIGNAL(removalRequested()), this, SLOT(remove()));
     connect(&m_node, SIGNAL(inputConnected(zodiac::PlugHandle, zodiac::PlugHandle)),
@@ -123,6 +127,16 @@ zodiac::PlugHandle NodeCtrl::addPlug(const QString& name, bool incoming)
 
 void NodeCtrl::inputConnected(PlugHandle myInput, PlugHandle otherOutput)
 {
+    /*
+    if(validator->hasCicle())
+        qDebug() <<"Tiene cilos";
+    else
+        qDebug() <<"Sin ciclos";
+
+    */
+
+    validator->hasCicle();
+
     m_plugs[myInput].append(otherOutput);
 }
 
