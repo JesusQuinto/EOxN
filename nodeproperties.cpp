@@ -1,17 +1,22 @@
 #include "nodeproperties.h"
+#include "mainwindow.h"
+#include "dialog.h"
+#include "gooddialog.h"
 
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QDebug>
+#include <QDialog>
 
 #include "collapsible.h"
 #include "nodectrl.h"
 
 QString NodeProperties::s_defaultPlugName = "plug";
 
-NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
+NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent, bool isRed = false)
     : QWidget(parent)
     , m_node(node)
     , m_nextPlugIsIncoming(true)
@@ -29,28 +34,80 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent)
     QHBoxLayout* nameLayout = new QHBoxLayout();
     m_nameEdit = new QLineEdit(m_node->getName(), this);
     connect(m_nameEdit, SIGNAL(editingFinished()), this, SLOT(renameNode()));
-    nameLayout->addWidget(new QLabel("Name", this));
+    nameLayout->addWidget(new QLabel("Nombre", this));
     nameLayout->addWidget(m_nameEdit);
     nameLayout->setContentsMargins(0, 4, 0, 0);
     mainLayout->addLayout(nameLayout);
 
-    // define the add plug button
-    m_plugLayout = new QGridLayout();
-    m_plugLayout->setContentsMargins(0, 8, 0, 0);   // leave space between the plug list and the name
-    m_plugLayout->setColumnStretch(1,1); // so the add-plug button always stays on the far right
-    m_addPlugButton = new QPushButton(this);
-    m_addPlugButton->setIconSize(QSize(8, 8));
-    m_addPlugButton->setIcon(QIcon(":/icons/plus.svg"));
-    m_addPlugButton->setFlat(true);
-    m_plugLayout->addWidget(new QLabel("Plugs", this), 0, 0, 1, 2, Qt::AlignLeft);
-    m_plugLayout->addWidget(m_addPlugButton, 0, 2);
-    connect(m_addPlugButton, SIGNAL(pressed()), this, SLOT(createNewPlug()));
+        // define the add plug button
+        m_plugLayout = new QGridLayout();
+        m_plugLayout->setContentsMargins(0, 8, 0, 0);   // leave space between the plug list and the name
+        m_plugLayout->setColumnStretch(1,1); // so the add-plug button always stays on the far right
+        m_addPlugButton = new QPushButton(this);
+        m_addPlugButton->setIconSize(QSize(8, 8));
+        m_addPlugButton->setIcon(QIcon(":/icons/plus.svg"));
+        m_addPlugButton->setFlat(true);
+        m_plugLayout->addWidget(new QLabel("Arco", this), 0, 0, 1, 2, Qt::AlignLeft);
+        m_plugLayout->addWidget(m_addPlugButton, 0, 2);
+        connect(m_addPlugButton, SIGNAL(pressed()), this, SLOT(createNewPlug()));
 
     // define the plugs
     for(zodiac::PlugHandle& plug : m_node->getPlugHandles()){
         addPlugRow(plug);
     }
     mainLayout->addLayout(m_plugLayout);
+
+        // define the detail button
+        m_detailLayout = new QGridLayout();
+        m_detailLayout->setContentsMargins(0, 8, 0, 0);   // leave space between the plug list and the name
+        m_detailLayout->setColumnStretch(1,1); // so the add-plug button always stays on the far right
+
+    if (isRed){
+        m_detaillButton = new QPushButton("Detalle",this);
+        m_detaillButton->setFlat(true);
+        m_detailLayout->addWidget(m_detaillButton, 0, 0);
+        connect(m_detaillButton, SIGNAL(pressed()), this, SLOT(opendetail()));
+     }
+    else{
+        m_detaillButton = new QPushButton("Propiedades",this);
+        m_detaillButton->setFlat(true);
+        m_detailLayout->addWidget(m_detaillButton, 0, 0);
+        connect(m_detaillButton, SIGNAL(pressed()), this, SLOT(properties()));
+    }
+
+    QPushButton * m_removeButton = new QPushButton("Eliminar",this);
+    m_removeButton->setFlat(true);
+    m_detailLayout->addWidget(m_removeButton, 0, 2);
+    connect(m_removeButton, SIGNAL(pressed()), this, SLOT(removeNode()));
+
+    mainLayout->addLayout(m_detailLayout);
+}
+
+void NodeProperties::removeNode(){
+   m_node->remove();
+}
+
+void NodeProperties::opendetail()
+{
+    Dialog  detail( this,
+                m_node->getName(),
+                m_node->getNodeHandle().getId().toString());
+
+    if(bool value = detail.exec())
+    {
+        qDebug() << value;
+    }
+}
+
+void NodeProperties::properties()
+{
+
+    GoodDialog good(this);
+
+    if(bool value = good.exec())
+    {
+        qDebug() << value;
+    }
 }
 
 void NodeProperties::renameNode()

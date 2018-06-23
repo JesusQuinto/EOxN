@@ -6,9 +6,10 @@
 #include "nodeproperties.h"
 #include "mainctrl.h"
 
-PropertyEditor::PropertyEditor(QWidget *parent)
+PropertyEditor::PropertyEditor(QWidget *parent, bool isRed)
     : QScrollArea(parent)
-    , m_mainCtrl(nullptr)
+    , m_mainCtrl(nullptr),
+      isRed(isRed)
 {
     // setup the scroll area
     setFrameShape(QFrame::NoFrame);
@@ -21,8 +22,9 @@ PropertyEditor::PropertyEditor(QWidget *parent)
 
     // ... and the layout of the view widget
     m_layout = new QVBoxLayout(viewWidget);
-    m_layout->setContentsMargins(QMargins(4,0,0,0));
+    m_layout->setContentsMargins(QMargins(4,0,4,0));
     m_layout->addStretch();
+
 }
 
 void PropertyEditor::showNodes(const QList<zodiac::NodeHandle>& selection)
@@ -46,9 +48,10 @@ void PropertyEditor::showNodes(const QList<zodiac::NodeHandle>& selection)
     for(zodiac::NodeHandle node : selection){
         if(!m_nodes.contains(node)){
             Collapsible* collapsible = new Collapsible(this);
-            collapsible->setWidget(new NodeProperties(m_mainCtrl->getCtrlForHandle(node), collapsible));
+            collapsible->setWidget(new NodeProperties(m_mainCtrl->getCtrlForHandle(node), collapsible,this->isRed ));
             m_layout->insertWidget(0, collapsible); // insert the new Collapsible at the top
             m_nodes.insert(node, collapsible);
         }
     }
+
 }

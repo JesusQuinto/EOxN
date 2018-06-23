@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include<QLoggingCategory>
 
 ///
 /// \brief Main function of this application.
@@ -12,11 +13,11 @@
 ///
 int main(int argc, char *argv[])
 {
+    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg, true);
     // create application
     QApplication app(argc, argv);
-    app.setOrganizationName("clemens-sielaff");
-    app.setOrganizationDomain("www.clemens-sielaff.com");
-    app.setApplicationName("ZodiacGraph_ExampleApp");
+    app.setOrganizationName("Visual.Soft");
+    app.setApplicationName("EOxN");
 
     // create the main window and enter the main execution loop
     MainWindow window;

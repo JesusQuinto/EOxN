@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "file.h"
 
 #include <QApplication>
 #include <QAction>
@@ -9,7 +8,6 @@
 #include <QSplitter>
 #include <QStyleFactory>
 #include <QToolBar>
-#include <QPushButton>
 
 #include "nodectrl.h"
 #include "mainctrl.h"
@@ -30,7 +28,7 @@ void createZodiacLogo(MainCtrl* mainCtrl);
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setWindowTitle("Red-Productiva");
+    setWindowTitle("Productor");
     setWindowIcon(QIcon(":/icons/zodiac_logo.png"));
 
     // create the main toolbar
@@ -49,17 +47,11 @@ MainWindow::MainWindow(QWidget *parent)
     zodiac::View* zodiacView = new zodiac::View(this);
     zodiacView->setScene(zodiacScene);
 
-
-
-
     // create the Property Editor
-    PropertyEditor* propertyEditor = new PropertyEditor(this,true);
+    PropertyEditor* propertyEditor = new PropertyEditor(this);
 
     // create the Main Controller
-    m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor,false);
-
-    //create the File Manager
-    File* file = new File(this,m_mainCtrl);
+    m_mainCtrl = new MainCtrl(this, zodiacScene, propertyEditor);
 
     // setup the main splitter
     m_mainSplitter = new QSplitter(Qt::Horizontal, this);
@@ -68,36 +60,18 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainSplitter->setSizes({100, 900});
 
     // create global actions
-    QAction* openAction = new QAction( tr("&Abrir"), this);
-    openAction->setShortcuts(QKeySequence::New);
-    openAction->setStatusTip(tr("Abrir Proyecto"));
-    mainToolBar->addAction(openAction);
-    connect(openAction, SIGNAL(triggered()), file, SLOT(open()));
-
-    QAction* saveAction = new QAction( tr("&Guardar"), this);
-    saveAction->setShortcuts(QKeySequence::New);
-    saveAction->setStatusTip(tr("Guardar Proyecto"));
-    mainToolBar->addAction(saveAction);
-    connect(saveAction, SIGNAL(triggered()), file, SLOT(saveAs()));
-
-    QAction* newNodeAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Add Productor"), this);
+    QAction* newNodeAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Add Node"), this);
     newNodeAction->setShortcuts(QKeySequence::New);
-    newNodeAction->setStatusTip(tr("Crear un nuevo Productor"));
+    newNodeAction->setStatusTip(tr("Create a new Node"));
     mainToolBar->addAction(newNodeAction);
-    connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createProductorNode()));
-
-    QAction* optimizationAction = new QAction(QIcon(":/icons/plus.svg"), tr("&Optimizar"), this);
-    optimizationAction->setShortcuts(QKeySequence::New);
-    optimizationAction->setStatusTip(tr("Correr Proceso de Optimizacion"));
-    mainToolBar->addAction(optimizationAction);
-    //connect(saveAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
+    connect(newNodeAction, SIGNAL(triggered()), m_mainCtrl, SLOT(createDefaultNode()));
 
     QWidget* emptySpacer = new QWidget();
     emptySpacer->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     mainToolBar->addWidget(emptySpacer);
 
-    QAction* aboutAction = new QAction(QIcon(":/icons/questionmark.svg"), tr("&Acerca"), this);
-    aboutAction->setStatusTip(tr("Mostrar Acerca"));
+    QAction* aboutAction = new QAction(QIcon(":/icons/questionmark.svg"), tr("&About"), this);
+    aboutAction->setStatusTip(tr("Show the about box"));
     mainToolBar->addAction(aboutAction);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(displayAbout()));
 
@@ -107,7 +81,7 @@ MainWindow::MainWindow(QWidget *parent)
     zodiacScene->updateStyle();
     zodiacView->updateStyle();
 
-    //createZodiacLogo(m_mainCtrl);
+   // createZodiacLogo(m_mainCtrl);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -126,14 +100,22 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::displayAbout()
 {
     QMessageBox aboutBox;
-    aboutBox.setWindowTitle("Acerca de EOxN");
+    aboutBox.setWindowTitle("About the ZodiacGraph Showcase Application");
     aboutBox.setText(
-        "<h3>Acerca de esta aplicacion</h3>"
-        "Optimizacion de procesos mediante simplex, bajo relaciones entre bienes, procesos y productores."
+        "<h3>About this Application</h3>"
+        "This example demonstrates how to use the <b>ZodiacGraph</b> both as a user and (on the source level) as a "
         "module of your own application."
-         "<h4>Basado en</h4>"
-          "Contribution Este trabajo utiliza la libreria de So long, -Clemens para construir su interfaz,"
-          "disponible en: https://github.com/clemenssielaff/ZodiacGraph"
+
+        "<h3>License</h3>"
+        "<b>ZodiacGraph</b> is developed by <a href=\"http://www.clemens-sielaff.com\" title=\"clemens-sielaff.com\">Clemens Sielaff</a> "
+        "and released under the terms of the <a href=\"https://opensource.org/licenses/MIT\" title=\"MIT License</a>."
+
+        "<h3>Icons</h3>"
+        "Icons from <a href=\"http://www.flaticon.com\" title=\"Flaticon\">www.flaticon.com</a>, licensed under <a href=\"http://creativecommons.org/licenses/by/3.0/\" title=\"Creative Commons BY 3.0\">CC BY 3.0</a><br>"
+        "&#8594; Arrows, Plus, Minus & Bucket Icons made by <a href=\"http://www.freepik.com\" title=\"Freepik\">Freepik</a><br>"
+        "&#8594; Door Icons made by <a href=\"http://www.icomoon.io\" title=\"Icomoon\">Icomoon</a><br>"
+        "&#8594; Questionmark Icon made by <a href=\"http://www.danielbruce.se\" title=\"Daniel Bruce\">Daniel Bruce</a><br>"
+        "&#8594; Play Icon made by <a href=\"http://yanlu.de\" title=\"Yannick\">Yannick</a>"
          );
     aboutBox.exec();
 }
@@ -341,8 +323,6 @@ void MainWindow::writeSettings()
     settings.endGroup(); // zodiac
 }
 
-
-/*
 void createZodiacLogo(MainCtrl* mainCtrl)
 {
     NodeCtrl* nodeCtrl12 = mainCtrl->createNode("Node 12");
@@ -899,4 +879,3 @@ void createZodiacLogo(MainCtrl* mainCtrl)
     nodeCtrl18->getNodeHandle().getPlug("plug").connectPlug(nodeCtrl19->getNodeHandle().getPlug("plug_6"));
     nodeCtrl18->getNodeHandle().getPlug("plug_5").connectPlug(nodeCtrl17->getNodeHandle().getPlug("plug_2"));
 }
-*/

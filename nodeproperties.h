@@ -52,7 +52,7 @@ class NodeProperties : public QWidget
     ///
     friend class PlugRow;
 
-public: // methods
+public:
 
     ///
     /// \brief Constructor.
@@ -60,7 +60,7 @@ public: // methods
     /// \param [in] node    Node whose properties to display.
     /// \param [in] parent  Collapsible parent object.
     ///
-    explicit NodeProperties(NodeCtrl* node, Collapsible *parent);
+    explicit NodeProperties(NodeCtrl* node, Collapsible *parent, bool isRed );
 
 private: // for friend
 
@@ -78,6 +78,12 @@ private: // for friend
     ///
     QGridLayout* getPlugLayout() const {return m_plugLayout;}
 
+
+    ///
+    ///     add_documentation
+    ///
+     QGridLayout* getdetailLayout() const {return m_detailLayout;}
+
     ///
     /// \brief Removes a plug from the node and the PlugRow from the editor.
     ///
@@ -93,9 +99,25 @@ private slots:
     void renameNode();
 
     ///
+    /// \brief add_documentation
+    ///
+    void removeNode();
+
+    ///
     /// \brief Called by pressing the add-plug button.
     ///
     void createNewPlug();
+
+
+    ///
+    /// \brief Called by pressing the open detail.
+    ///
+    void opendetail();
+
+    ///
+    /// \brief Called by pressing the open properties node.
+    ///
+    void properties();
 
     ///
     /// \brief Creates a new entry in the plug list of this property editor alongside its PlugRow.
@@ -120,10 +142,22 @@ private: // members
     QGridLayout* m_plugLayout;
 
     ///
+    ///  add_documentation
+    ///
+    QGridLayout* m_detailLayout;
+
+    ///
     /// \brief Button to add a new Plug to the node.
     ///
     QPushButton* m_addPlugButton;
 
+    ///
+    /// \brief Button to detail the node.
+    ///
+    QPushButton * m_detaillButton;
+
+
+    QPushButton* m_proerties;
     ///
     /// \brief All PlugRows contained in this editor.
     ///

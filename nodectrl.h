@@ -31,6 +31,7 @@
 
 #include "zodiacgraph/nodehandle.h"
 #include "zodiacgraph/plughandle.h"
+#include "validator.h"
 
 class MainCtrl;
 
@@ -145,6 +146,7 @@ public: // methods
     ///
     void setSelected(bool isSelected);
 
+
 public slots:
 
     ///
@@ -165,6 +167,8 @@ private: // methods
     /// \return                 Handle of the created Plug.
     ///
     zodiac::PlugHandle addPlug(const QString& name, bool incoming);
+
+    Validator  *validator;
 
 private slots:
 

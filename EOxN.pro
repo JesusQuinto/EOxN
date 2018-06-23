@@ -43,7 +43,11 @@ SOURCES += main.cpp\
     zodiacgraph/scenehandle.cpp \
     zodiacgraph/straightdoubleedge.cpp \
     zodiacgraph/straightedge.cpp \
-    zodiacgraph/view.cpp
+    zodiacgraph/view.cpp \
+    dialog.cpp \
+    file.cpp \
+    validator.cpp \
+    gooddialog.cpp
 
 HEADERS  += mainwindow.h \
     collapsible.h \
@@ -74,7 +78,17 @@ HEADERS  += mainwindow.h \
     zodiacgraph/straightdoubleedge.h \
     zodiacgraph/straightedge.h \
     zodiacgraph/utils.h \
-    zodiacgraph/view.h
+    zodiacgraph/view.h \
+    dialog.h \
+    file.h \
+    validator.h \
+    gooddialog.h
 
 RESOURCES += \
     res/icons.qrc
+
+FORMS += \
+    dialog.ui \
+    gooddialog.ui
+
+

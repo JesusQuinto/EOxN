@@ -56,7 +56,12 @@ public: // methods
     /// \param [in] scene           Handle of a zodiac::Scene.
     /// \param [in] propertyEditor  Property editor.
     ///
-    explicit MainCtrl(QObject *parent, zodiac::Scene* scene, PropertyEditor* propertyEditor);
+    explicit MainCtrl(
+            QObject *parent,
+            zodiac::Scene* scene,
+            PropertyEditor* propertyEditor,
+            bool isProducer
+            );
 
     ///
     /// \brief Creates a new node in the graph.
@@ -76,6 +81,7 @@ public: // methods
     ///
     bool deleteNode(NodeCtrl* node);
 
+    bool cleanScene();
     ///
     /// \brief Returns the NodeCtrl that manages a given NodeHandle.
     ///
@@ -102,12 +108,19 @@ public: // methods
     ///
     bool shutdown();
 
+   zodiac::SceneHandle* getSocialScene();
+   void setIsProducer(bool);
+   bool getIsProducer();
+
+
 public slots:
 
     ///
     /// \brief Creates a new node in the graph selects and activates it.
     ///
     void createDefaultNode();
+    void createProcessNode();
+    void createProductorNode();
 
 private slots:
 
@@ -146,6 +159,8 @@ private: // static members
     /// \brief Default node name. "Node_" will result in a default name of "Node_12" for example.
     ///
     static QString s_defaultName;
+
+    bool m_isProducer;
 
 };
 

@@ -7,14 +7,19 @@
 #include "propertyeditor.h"
 #include "zodiacgraph/nodehandle.h"
 
-QString MainCtrl::s_defaultName = "Node ";
+QString MainCtrl::s_defaultName = "bien ";
 
-MainCtrl::MainCtrl(QObject *parent, zodiac::Scene* scene, PropertyEditor* propertyEditor)
+MainCtrl::MainCtrl(
+        QObject *parent,
+        zodiac::Scene* scene,
+        PropertyEditor* propertyEditor,
+        bool IsProducer)
     : QObject(parent)
     , m_scene(zodiac::SceneHandle(scene))
     , m_propertyEditor(propertyEditor)
     , m_nodes(QHash<zodiac::NodeHandle, NodeCtrl*>())
     , m_nodeIndex(1)            // name suffixes start at 1
+    ,m_isProducer(IsProducer)
 {
     m_propertyEditor->setMainCtrl(this);
 
@@ -40,6 +45,17 @@ NodeCtrl* MainCtrl::createNode(const QString& name)
     return nodeCtrl;
 }
 
+bool MainCtrl::cleanScene()
+{
+    for(auto node: m_nodes.values())
+    {
+        deleteNode(node);
+    }
+    m_nodes.clear();
+
+    return true;
+}
+
 bool MainCtrl::deleteNode(NodeCtrl* node)
 {
 #ifdef QT_DEBUG
@@ -50,10 +66,13 @@ bool MainCtrl::deleteNode(NodeCtrl* node)
     }
 #endif
 
-    if(!node->isRemovable()){
-        // nodes with connections cannot be deleted
-        return false;
+    if(!node->isRemovable())
+    {
+        auto plugHandleLst =  node->getPlugHandles();
+        for(auto plug: plugHandleLst)
+            plug.disconnectAll();
     }
+
 
     // disconnect and delete the node
     node->disconnect();
@@ -112,20 +131,34 @@ bool MainCtrl::shutdown()
 void MainCtrl::createDefaultNode()
 {
     NodeCtrl* newNode = createNode();
-
-//    int plugCount = (qreal(qrand())/qreal(RAND_MAX))*12;
-//    for(int i = 0; i < plugCount + 4; ++i){
-//        if((qreal(qrand())/qreal(RAND_MAX))<0.5){
-//            newNode->addIncomingPlug("plug");
-//        } else {
-//            newNode->addOutgoingPlug("plug");
-//        }
-//    }
-
     newNode->setSelected(true);
+}
+
+void MainCtrl::createProductorNode()
+{
+        NodeCtrl* newNode = createNode("Productor"+ QString::number(m_nodeIndex++));
+        newNode->setSelected(true);
+}
+
+void MainCtrl::createProcessNode()
+{
+        NodeCtrl* newNode = createNode("Proceso"+ QString::number(m_nodeIndex++));
+        newNode->setSelected(true);
 }
 
 void MainCtrl::selectionChanged(QList<zodiac::NodeHandle> selection)
 {
     m_propertyEditor->showNodes(selection);
+}
+
+zodiac::SceneHandle* MainCtrl::getSocialScene(){
+    return &m_scene;
+}
+
+bool MainCtrl::getIsProducer(){
+    return m_isProducer;
+}
+
+void MainCtrl::setIsProducer(bool isProducer){
+    m_isProducer = isProducer;
 }
