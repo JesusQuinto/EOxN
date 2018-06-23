@@ -129,9 +129,11 @@ void MainWindow::displayAbout()
     aboutBox.setWindowTitle("Acerca de EOxN");
     aboutBox.setText(
         "<h3>Acerca de esta aplicacion</h3>"
-        "This example demonstrates how to use the <b>ZodiacGraph</b> both as a user and (on the source level) as a "
+        "Optimizacion de procesos mediante simplex, bajo relaciones entre bienes, procesos y productores."
         "module of your own application."
-
+         "<h4>Basado en</h4>"
+          "Contribution Este trabajo utiliza la libreria de So long, -Clemens para construir su interfaz,"
+          "disponible en: https://github.com/clemenssielaff/ZodiacGraph"
          );
     aboutBox.exec();
 }
