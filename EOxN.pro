@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     zodiacgraph/view.cpp \
     dialog.cpp \
     file.cpp \
-    validator.cpp
+    validator.cpp \
+    gooddialog.cpp
 
 HEADERS  += mainwindow.h \
     collapsible.h \
@@ -80,12 +81,14 @@ HEADERS  += mainwindow.h \
     zodiacgraph/view.h \
     dialog.h \
     file.h \
-    validator.h
+    validator.h \
+    gooddialog.h
 
 RESOURCES += \
     res/icons.qrc
 
 FORMS += \
-    dialog.ui
+    dialog.ui \
+    gooddialog.ui
 
 

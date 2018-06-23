@@ -1,6 +1,7 @@
 #include "nodeproperties.h"
 #include "mainwindow.h"
 #include "dialog.h"
+#include "gooddialog.h"
 
 #include <QGridLayout>
 #include <QLabel>
@@ -67,6 +68,12 @@ NodeProperties::NodeProperties(NodeCtrl *node, Collapsible *parent, bool isRed =
         m_detailLayout->addWidget(m_detaillButton, 0, 0);
         connect(m_detaillButton, SIGNAL(pressed()), this, SLOT(opendetail()));
      }
+    else{
+        m_detaillButton = new QPushButton("Propiedades",this);
+        m_detaillButton->setFlat(true);
+        m_detailLayout->addWidget(m_detaillButton, 0, 0);
+        connect(m_detaillButton, SIGNAL(pressed()), this, SLOT(properties()));
+    }
 
     QPushButton * m_removeButton = new QPushButton("Eliminar",this);
     m_removeButton->setFlat(true);
@@ -87,6 +94,17 @@ void NodeProperties::opendetail()
                 m_node->getNodeHandle().getId().toString());
 
     if(bool value = detail.exec())
+    {
+        qDebug() << value;
+    }
+}
+
+void NodeProperties::properties()
+{
+
+    GoodDialog good(this);
+
+    if(bool value = good.exec())
     {
         qDebug() << value;
     }

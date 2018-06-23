@@ -115,6 +115,11 @@ private slots:
     void opendetail();
 
     ///
+    /// \brief Called by pressing the open properties node.
+    ///
+    void properties();
+
+    ///
     /// \brief Creates a new entry in the plug list of this property editor alongside its PlugRow.
     ///
     void addPlugRow(zodiac::PlugHandle plug);
@@ -152,6 +157,7 @@ private: // members
     QPushButton * m_detaillButton;
 
 
+    QPushButton* m_proerties;
     ///
     /// \brief All PlugRows contained in this editor.
     ///

@@ -8,7 +8,8 @@
 
 PropertyEditor::PropertyEditor(QWidget *parent, bool isRed)
     : QScrollArea(parent)
-    , m_mainCtrl(nullptr)
+    , m_mainCtrl(nullptr),
+      isRed(isRed)
 {
     // setup the scroll area
     setFrameShape(QFrame::NoFrame);
@@ -23,8 +24,6 @@ PropertyEditor::PropertyEditor(QWidget *parent, bool isRed)
     m_layout = new QVBoxLayout(viewWidget);
     m_layout->setContentsMargins(QMargins(4,0,4,0));
     m_layout->addStretch();
-
-    this->isRed = isRed;
 
 }
 
